@@ -11,7 +11,7 @@ setup(
     packages=find_packages(exclude=['tests', 'tests.*']),
     entry_points={
         'console_scripts': [
-            'niuapi = niuApi.cli:run',
+            'niu-api = niuApi.cli:run',
         ]
     },
     include_package_data=True,

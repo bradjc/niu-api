@@ -16,10 +16,23 @@ class NIURequests():
     TOKENFILE = os.environ.get('HOME') + '/.nui-token'
 
     def __init__(self, config) -> None:
+        """Initialize NIURequests
+
+        Args:
+            config (dict): config object of the yaml file
+        """
         
         self.token = self.__get_token(config)
 
     def __get_token(self, config):
+        """Return the access_token for further requests
+
+        Args:
+            config (dict): config object of the yaml file
+
+        Returns:
+            str: valid access_key
+        """
         
         email = config['niuapi']['email']
         password = config['niuapi']['password']
@@ -34,7 +47,7 @@ class NIURequests():
         tokenfile.close()
 
         # generate new token, if expired
-        now = datetime.datetime.now().timestamp()
+        now = int(datetime.datetime.now().timestamp())
         if (now > tokens.get('access_token').get('expires') or
                 now > tokens.get('refresh_token').get('expires')):
             login_data = self.__login(email, password)
@@ -47,6 +60,11 @@ class NIURequests():
         return tokens.get('access_token').get('token')
 
     def __generate_token_file(self, login_data):
+        """Generate token file as json
+
+        Args:
+            login_data (dict): login data from json response after login
+        """
 
         write_data = {
             'access_token': {
@@ -65,6 +83,18 @@ class NIURequests():
         return 
             
     def __login(self, email, password):
+        """Login into NUI API and get the login details, e.g. tokens
+
+        Args:
+            email (str): get the email for login
+            password (str): get the password of the account
+
+        Raises:
+            NIURequestError: Raise errir, if login fails. The status must be greater 0 to raise the error.
+
+        Returns:
+            dict: JSON response of successfull login process
+        """
 
         response = requests.post(
             self.LOGINURL,

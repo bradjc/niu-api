@@ -14,6 +14,7 @@ class NIURequests():
     APIURL = 'https://app-api-fk.niu.com/v5/'
     LOGINURL = 'https://account-fk.niu.com/v3/api/oauth2/token'
     TOKENFILE = os.environ.get('HOME') + '/.nui-token'
+    TIMESTAMP = int(datetime.datetime.now().timestamp())
 
     def __init__(self, config) -> None:
         """Initialize NIURequests
@@ -23,6 +24,8 @@ class NIURequests():
         """
         
         self.token = self.__get_token(config)
+        self.scooter = self.get_scooter()
+        print(self.scooter)
 
     def __get_token(self, config):
         """Return the access_token for further requests
@@ -114,3 +117,33 @@ class NIURequests():
             raise NIURequestError(json_response.get('desc'))
             
         return json_response
+
+    def get_scooter(self):
+        """Get all scooters conntected with the desired accout
+
+        Raises:
+            NIURequestError: Raises if response status is greater than 0
+            NIURequestError: Raises when no scooter is found
+
+        Returns:
+            list: a list with serial numbers of all scooters
+        """
+
+        response = requests.get(
+            f'{self.APIURL}/scooter/list',
+            params={'_': self.TIMESTAMP},
+            headers={'token': self.token}
+        )
+
+        json_response = json.loads(response.text)
+        if json_response.get('status') > 0:
+            raise NIURequestError(json_response.get('desc'))
+
+        if len(json_response.get('data').get('items')) == 0:
+            raise NIURequestError('No scooter found')
+        
+        scooters = []
+        for scooter in json_response.get('data').get('items'):
+            scooters.append(scooter.get('sn_id'))
+        
+        return scooters

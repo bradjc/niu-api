@@ -9,3 +9,10 @@ class NIUConfigError(Exception):
     """
 
     pass
+
+class NIURequestError(Exception):
+    """NIURequestError Exception
+
+    Args:
+        Exception (str): message
+    """

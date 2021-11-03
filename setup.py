@@ -15,7 +15,7 @@ setup(
         ]
     },
     include_package_data=True,
-    install_requires=['pyyaml', 'argparse'],
+    install_requires=['pyyaml', 'argparse', 'requests'],
     license=__license__,
     zip_safe=False,
 )

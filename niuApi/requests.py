@@ -98,7 +98,7 @@ def get_token():
 
     return tokens.get('access_token').get('token')
 
-def get_request(slug):
+def get_request(slug, add_params={}, add_headers={}):
         """Perform get requests with token (after login)
 
         Args:
@@ -113,11 +113,15 @@ def get_request(slug):
 
         response = requests.get(
             f'{APIURL}/{slug}',
-            params={'_': TIMESTAMP},
+            params={
+                '_': TIMESTAMP,
+                **add_params
+            },
             headers={
                 'token': get_token(),
                 'accept': 'application/json',
-                'user-agent': 'manager/4.6.44 (nuiAPI);lang=en-US;clientIdentifier=Overseas'
+                'user-agent': 'manager/4.6.44 (nuiAPI);lang=en-US;clientIdentifier=Overseas',
+                **add_headers
             }
         )
 

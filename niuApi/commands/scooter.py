@@ -57,3 +57,23 @@ def details(sn: str = None, **kwargs) -> dict:
         raise NIURequestError('No scooter details returned')
     
     return datasets
+
+def motor_data(sn: str = None, **kwargs) -> dict:
+
+    scooters = []
+    if sn is None:
+        scooters = list()
+    else:
+        scooters.append(sn)
+
+    datasets = {}
+    for serial in scooters:
+        datasets[serial] = get_request(
+            f'scooter/motor_data/index_info',
+            add_params={'sn': serial}
+        ).get('data')
+    
+    if len(datasets.keys()) == 0:
+        raise NIURequestError('No motor_data returned')
+    
+    return datasets

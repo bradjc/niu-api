@@ -6,6 +6,11 @@ from niuApi.commands import dispatch
 from niuApi.exceptions import NIURequestError
 
 def run():
+    """CLI entrypoint
+
+    Returns:
+        int: depending on errors
+    """
 
     args = get_args()
     

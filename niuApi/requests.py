@@ -18,6 +18,11 @@ TIMESTAMP = int(datetime.datetime.now().timestamp())
 def get_token():
 
     def __generate_token_file(login_data):
+        """Write token file
+
+        Args:
+            login_data (dict): return json of login process
+        """
 
         write_data = {
             'access_token': {
@@ -32,10 +37,21 @@ def get_token():
 
         with open(TOKENFILE, 'w') as tokenfile:
             json.dump(write_data, tokenfile)
-   
-        return
+
 
     def __login(email, password):
+        """Perform login action to get the access token
+
+        Args:
+            email (str): login email
+            password (str): login password
+
+        Raises:
+            NIURequestError: if response status greater than 0
+
+        Returns:
+            dict: json response after decoding
+        """
 
         response = requests.post(
             LOGINURL,
@@ -92,7 +108,7 @@ def get_request(slug):
             NIURequestError: raise when request status code greater than 0
 
         Returns:
-            dict: response as dict
+            dict: json response after decoding
         """
 
         response = requests.get(

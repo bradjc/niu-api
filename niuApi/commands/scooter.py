@@ -1,15 +1,19 @@
 from niuApi.requests import get_request
 from niuApi.exceptions import NIURequestError
 
-def list(show_all: bool = False, **kwargs):
+def list(show_all: bool = False, **kwargs) -> list:
         """Get all scooters conntected with the desired accout
 
+        Args:
+            show_all (bool, optional): Set true if all details should be returned.
+                                       Otherwise, the serial number is returned
+
         Raises:
-            NIURequestError: Raises if response status is greater than 0
             NIURequestError: Raises when no scooter is found
 
         Returns:
-            list: a list with serial numbers of all scooters
+            list: serial numbers of all scooters (if show_all is false)
+                  detailed response, including the serial number(s) (if show_all is true)
         """
 
         json_response = get_request('scooter/list')
@@ -26,7 +30,18 @@ def list(show_all: bool = False, **kwargs):
         
         return scooters
 
-def details(sn=None):
+def details(sn: str = None, **kwargs) -> dict:
+    """Get scooter details
+
+    Args:
+        sn (str, optional): Serial Number of scooter. Defaults to None.
+
+    Raises:
+        NIURequestError: Raise error, when no scooter details returned
+
+    Returns:
+        dict: key: scooter serial, value: details
+    """
 
     scooters = []
     if sn is None:

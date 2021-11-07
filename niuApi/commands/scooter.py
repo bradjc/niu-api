@@ -51,7 +51,7 @@ def details(sn: str = None, **kwargs) -> dict:
 
     datasets = {}
     for serial in scooters:
-        datasets[serial] = get_request(f'scooter/detail/{serial}')
+        datasets[serial] = get_request(f'scooter/detail/{serial}').get('data')
     
     if len(datasets.keys()) == 0:
         raise NIURequestError('No scooter details returned')

@@ -2,17 +2,18 @@
 """
 
 from niuApi.arg import get_args
-from niuApi.config import NIUConfig
-from niuApi.requests import NIURequests
+from niuApi.commands import dispatch
 from niuApi.exceptions import NIURequestError
 
 def run():
 
     args = get_args()
-    config = NIUConfig()
     
     try:
-        NIURequests(config)
+        print(dispatch(args.action, args.options))
+    except TypeError as exc:
+        print(exc)
+        return 3
     except NIURequestError as exc:
         print(exc)
         return 2

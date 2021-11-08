@@ -11,7 +11,7 @@ from niuApi.config import NIUConfig
 from niuApi.exceptions import NIURequestError
 
 TOKENFILE = os.environ.get('HOME') + '/.nui-token'
-APIURL = 'https://app-api-fk.niu.com/v5'
+APIURL = 'https://app-api-fk.niu.com'
 LOGINURL = 'https://account-fk.niu.com/v3/api/oauth2/token'
 TIMESTAMP = int(datetime.datetime.now().timestamp())
 
@@ -98,7 +98,7 @@ def get_token():
 
     return tokens.get('access_token').get('token')
 
-def get_request(slug, add_params={}, add_headers={}):
+def do_request(slug, method='get', add_params={}, add_headers={}):
         """Perform get requests with token (after login)
 
         Args:
@@ -111,7 +111,7 @@ def get_request(slug, add_params={}, add_headers={}):
             dict: json response after decoding
         """
 
-        response = requests.get(
+        response = getattr(requests, method)(
             f'{APIURL}/{slug}',
             params={
                 '_': TIMESTAMP,

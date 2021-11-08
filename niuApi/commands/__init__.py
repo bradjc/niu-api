@@ -31,6 +31,9 @@ def dispatch(command, options=None):
 
         for key, value in options.items():
             if not isinstance(value, locate(annotation)):
-                raise TypeError(f'Option {key} should be type {annotation} - type {type(value).__name__} is given')
+                if annotation == 'list':
+                    options[key] = [ value ]
+                else:
+                    raise TypeError(f'Option {key} should be type {annotation} - type {type(value).__name__} is given')
 
     return getattr(mod, func)(**options)

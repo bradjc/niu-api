@@ -1,79 +1,21 @@
-from niuApi.requests import get_request
-from niuApi.exceptions import NIURequestError
+import niuApi.apicommands as apicommands
 
-def list(show_all: bool = False, **kwargs) -> list:
-        """Get all scooters conntected with the desired accout
-
-        Args:
-            show_all (bool, optional): Set true if all details should be returned.
-                                       Otherwise, the serial number is returned
-
-        Raises:
-            NIURequestError: Raises when no scooter is found
-
-        Returns:
-            list: serial numbers of all scooters (if show_all is false)
-                  detailed response, including the serial number(s) (if show_all is true)
-        """
-
-        json_response = get_request('scooter/list')
-
-        if len(json_response.get('data').get('items')) == 0:
-            raise NIURequestError('No scooter found')
-
-        scooters = []
-        for scooter in json_response.get('data').get('items'):
-            if show_all:
-                scooters.append(scooter)
-            else:
-                scooters.append(scooter.get('sn_id'))
-        
-        return scooters
-
-def details(sn: str = None, **kwargs) -> dict:
-    """Get scooter details
-
-    Args:
-        sn (str, optional): Serial Number of scooter. Defaults to None.
-
-    Raises:
-        NIURequestError: Raise error, when no scooter details returned
+def list(print: list = ['sn_id'], **kwargs) -> dict:
+    """Get all scooters conntected with the desired accout
 
     Returns:
-        dict: key: scooter serial, value: details
+        list: all scooters
     """
 
-    scooters = []
-    if sn is None:
-        scooters = list()
-    else:
-        scooters.append(sn)
+    scooters = apicommands.v5.scooter_list()
 
-    datasets = {}
-    for serial in scooters:
-        datasets[serial] = get_request(f'scooter/detail/{serial}').get('data')
-    
-    if len(datasets.keys()) == 0:
-        raise NIURequestError('No scooter details returned')
-    
-    return datasets
+    out = {}
+    for scooter in scooters:
+        sn = scooter.get('sn_id')
 
-def motor_data(sn: str = None, **kwargs) -> dict:
+        out[sn] = []
+        for info in print:
+            if scooter.get(info):
+                out[sn].append(scooter.get(info))
 
-    scooters = []
-    if sn is None:
-        scooters = list()
-    else:
-        scooters.append(sn)
-
-    datasets = {}
-    for serial in scooters:
-        datasets[serial] = get_request(
-            f'scooter/motor_data/index_info',
-            add_params={'sn': serial}
-        ).get('data')
-    
-    if len(datasets.keys()) == 0:
-        raise NIURequestError('No motor_data returned')
-    
-    return datasets
+    return out

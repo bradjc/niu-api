@@ -26,6 +26,15 @@ def get_args():
     )
 
     parse.add_argument(
+        '-o',
+        '--out',
+        dest='out',
+        help='Set output type (default: uf (userfriendly))',
+        choices=['raw', 'uf'],
+        default='uf'
+    )
+
+    parse.add_argument(
         'action',
         help='Execute command'
     )
@@ -47,7 +56,9 @@ class StoreDictKeyPair(argparse.Action):
         for value in values:
             key, value = value.split('=')
 
-            if value.lower() == 'true':
+            if value.lower() == 'true' or value.lower() == 'false':
                 value = json.loads(value.lower())
+            elif ',' in value:
+                value = value.split(',')
 
             getattr(namespace, self.dest)[key] = value

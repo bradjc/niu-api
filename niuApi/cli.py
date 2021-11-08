@@ -4,6 +4,7 @@
 from niuApi.arg import get_args
 from niuApi.commands import dispatch
 from niuApi.exceptions import NIURequestError
+from niuApi.output import out
 
 def run():
     """CLI entrypoint
@@ -15,7 +16,7 @@ def run():
     args = get_args()
     
     try:
-        print(dispatch(args.action, args.options))
+        out(dispatch(args.action, args.options))
     except TypeError as exc:
         print(exc)
         return 3

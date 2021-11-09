@@ -16,7 +16,12 @@ def scooter_list():
 
 def scooter_detail(serial):
 
-    json_response = do_request(f'v5/scooter/detail/{serial}').get('data')
+    json_response = do_request(
+        f'v5/scooter/detail/{serial}',
+        add_headers={
+            'user-agent': 'manager/4.6.44 (nuiAPI);lang=en-US;clientIdentifier=Overseas'
+        }
+    ).get('data')
 
     if len(json_response.keys()) == 0:
         raise NIURequestError('No scooter details returned')

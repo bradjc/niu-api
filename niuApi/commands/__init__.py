@@ -29,11 +29,12 @@ def dispatch(command, options=None):
         if annotation == '_empty':
             continue
 
-        for key, value in options.items():
-            if not isinstance(value, locate(annotation)):
+        opt = options.get(parameter, False)
+        if opt:
+            if not isinstance(opt, locate(annotation)):
                 if annotation == 'list':
-                    options[key] = [ value ]
+                    options[parameter] = [ opt ]
                 else:
-                    raise TypeError(f'Option {key} should be type {annotation} - type {type(value).__name__} is given')
+                    raise TypeError(f'Option {parameter} should be type {annotation} - type {type(opt).__name__} is given')
 
     return getattr(mod, func)(**options)

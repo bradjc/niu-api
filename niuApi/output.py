@@ -11,8 +11,17 @@ def out(msg):
 
     if isinstance(msg, dict):
         if out == 'uf':
-            for value in msg.values():
-                print(*value)
+            for infos in msg.values():
+                if not isinstance(infos, dict):
+                    raise TypeError(f'{infos} is not a dict')
+                
+                skip = False
+                for value in infos.values():
+                    if isinstance(value, dict):
+                        skip = True
+                        print(*value.values())
+                
+                if not skip: print(*infos.values())
         else:
             print(msg)
     else:

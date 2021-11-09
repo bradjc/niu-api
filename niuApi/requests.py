@@ -98,7 +98,7 @@ def get_token():
 
     return tokens.get('access_token').get('token')
 
-def do_request(slug, method='get', add_params={}, add_headers={}):
+def do_request(slug, method='get', add_params={}, add_headers={}, add_data={}):
         """Perform get requests with token (after login)
 
         Args:
@@ -111,18 +111,28 @@ def do_request(slug, method='get', add_params={}, add_headers={}):
             dict: json response after decoding
         """
 
-        response = getattr(requests, method)(
-            f'{APIURL}/{slug}',
-            params={
-                '_': TIMESTAMP,
-                **add_params
-            },
-            headers={
+        request_options = {
+            'headers': {
                 'token': get_token(),
                 'accept': 'application/json',
-                'user-agent': 'manager/4.6.44 (nuiAPI);lang=en-US;clientIdentifier=Overseas',
                 **add_headers
+            },
+        }
+
+        if method == 'get':
+            request_options['params'] = {
+                '_': TIMESTAMP,
+                **add_params
             }
+        elif method == 'post':
+            request_options['json'] = {
+                'token': get_token(),
+                **add_data
+            }
+
+        response = getattr(requests, method)(
+            f'{APIURL}/{slug}',
+            **request_options
         )
 
         if response.status_code == 200:

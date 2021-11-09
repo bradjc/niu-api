@@ -9,7 +9,7 @@ def motoinfo_overallTally(serial):
     json_response = do_request(
         'motoinfo/overallTally',
         method='post',
-        add_headers={'sn': serial}
+        add_data={'sn': serial}
     ).get('data')
 
     if len(json_response.keys()) == 0:

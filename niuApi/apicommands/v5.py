@@ -32,6 +32,9 @@ def scooter_motor_data_index_info(serial):
 
     json_response = do_request(
         'v5/scooter/motor_data/index_info',
+        add_headers={
+            'user-agent': 'manager/4.6.44 (nuiAPI);lang=en-US;clientIdentifier=Overseas'
+        },
         add_params={'sn': serial}
     ).get('data')
 

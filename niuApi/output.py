@@ -1,7 +1,8 @@
 """NUIApi output module
 """
 
-from typing import Type
+import json
+
 from niuApi.arg import get_args
 
 def out(msg):
@@ -22,6 +23,8 @@ def out(msg):
                         print(*value.values())
                 
                 if not skip: print(*infos.values())
+        elif out == 'json':
+            print(json.dumps(msg))
         else:
             print(msg)
     else:

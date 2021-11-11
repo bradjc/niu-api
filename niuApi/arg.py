@@ -30,7 +30,7 @@ def get_args():
         '--out',
         dest='out',
         help='Set output type (default: uf (userfriendly))',
-        choices=['raw', 'uf'],
+        choices=['raw', 'uf', 'json'],
         default='uf'
     )
 

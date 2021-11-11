@@ -100,3 +100,37 @@ def info(serial: str = None, bmsid: str = None, print: list = ['bmsId', 'battery
     out[sn] = battery_info
 
     return out
+
+def ecu(serial: str = None, print: list = ['centreCtrlBattery']) -> dict:
+    """Get info of ecu battery
+
+    Args:
+        serial (str, optional): Serial number of given scooter. Defaults to None.
+        print (list, optional): Print following options. Defaults to ['centreCtrlBattery'].
+
+    Returns:
+        dict: key: serial number, values: batteries with subkeys and subvalues
+    """
+
+    possible_prints = ['centreCtrlBattery']
+
+    scooters = apicommands.v5.scooter_list()
+
+    out = {}
+    for scooter in scooters:
+        sn = scooter.get('sn_id')
+        out[sn] = {}
+
+        if serial is not None:
+            if sn != serial:
+                continue
+
+        info = apicommands.v5.scooter_motor_data_index_info(sn)
+
+        for arg in print:
+            try:
+                if arg in possible_prints: out[sn][arg] = info[arg]
+            except KeyError:
+                pass
+
+    return out

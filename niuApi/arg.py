@@ -35,6 +35,13 @@ def get_args():
     )
 
     parse.add_argument(
+        '--no_serial',
+        dest='print_serial',
+        help='Dont print serial number of scooter',
+        action='store_false',
+    )
+
+    parse.add_argument(
         'action',
         help='Execute command'
     )

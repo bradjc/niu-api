@@ -12,17 +12,26 @@ def out(msg):
 
     if isinstance(msg, dict):
         if out == 'uf':
-            for infos in msg.values():
+            for sn, infos in msg.items():
                 if not isinstance(infos, dict):
                     raise TypeError(f'{infos} is not a dict')
-                
+
+                if args.print_serial: print(sn)
                 skip = False
                 for value in infos.values():
                     if isinstance(value, dict):
                         skip = True
-                        print(*value.values())
-                
-                if not skip: print(*infos.values())
+                        if args.print_serial:
+                            print('\t {0}'.format(*value.values()))
+                        else:
+                            print(*value.values())
+
+                if not skip:
+                    if args.print_serial:
+                        print('\t {0}'.format(*infos.values()))
+                    else:
+                        print(*infos.values())
+
         elif out == 'json':
             print(json.dumps(msg))
         else:

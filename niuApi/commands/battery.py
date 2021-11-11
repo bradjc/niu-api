@@ -25,8 +25,16 @@ def list(serial: str = None, print: list = ['bmsId'], **kwargs) -> dict:
                 continue
         
         batteries = apicommands.v3.motor_data_battery_info(sn).get('batteries')
+        i = 1
         for values in batteries.values():
+
             bmsid = values.get('bmsId')
+            if not bmsid:
+                battery_info[i] = {}
+                battery_info[i]['info'] = f'Battery {i}: not connected'
+                i += 1
+                continue
+            
             battery_info[bmsid] = {}
 
             for arg in print:

@@ -1,16 +1,17 @@
 import niuApi.apicommands as apicommands
-import logging
 
-def list(serial: str = None, print: list = ['bmsId', 'batteryCharging'], **kwargs) -> dict:
+def list(serial: str = None, print: list = ['bmsId'], **kwargs) -> dict:
     """Lists Batteries connected to the scooter
 
     Args:
         serial (str, optional): serial number of scooter. Defaults to None.
-        print (list, optional): Set the options to print. Defaults to ['bmsId', 'batteryCharging'].
+        print (list, optional): Set the options to print. Defaults to ['bmsId'].
 
     Returns:
         dict: key: serial number, values: batteries with subkeys and subvalues
     """
+
+    possible_prints = ['bmsId']
 
     scooters = apicommands.v5.scooter_list()
 
@@ -30,7 +31,7 @@ def list(serial: str = None, print: list = ['bmsId', 'batteryCharging'], **kwarg
 
             for arg in print:
                 try:
-                    battery_info[bmsid][arg] = values[arg]
+                    if arg in possible_prints: battery_info[bmsid][arg] = values[arg]
                 except KeyError:
                     pass
             

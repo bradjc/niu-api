@@ -10,6 +10,8 @@ def list(print: list = ['sn_id'], **kwargs) -> dict:
         dict: key: serial number, values: values in print option
     """
 
+    possible_prints = ['sn_id', 'scooter_name']
+
     scooters = apicommands.v5.scooter_list()
 
     out = {}
@@ -19,7 +21,7 @@ def list(print: list = ['sn_id'], **kwargs) -> dict:
 
         for arg in print:
             try:
-                out[sn][arg] = scooter[arg]
+                if arg in possible_prints: out[sn][arg] = scooter[arg]
             except KeyError:
                 pass
                 
@@ -35,6 +37,12 @@ def info(serial: str = None, print: list = ['scooter_name', 'totalMileage'], **k
     Returns:
         dict: key: serial number, values: values in print option
     """
+
+    possible_prints = [
+        'scooter_name', 'totalMileage', 'sn_id',
+        'scooter_type', 'scooter_version', 'soft_version',
+        'mileage', 'engine_num', 'battery'
+    ]
 
     scooters = apicommands.v5.scooter_list()
 
@@ -52,7 +60,7 @@ def info(serial: str = None, print: list = ['scooter_name', 'totalMileage'], **k
         details['totalMileage'] = int(total_mileage.get('totalMileage'))    
         for arg in print:
             try:
-                out[sn][arg] = details[arg]
+                if arg in possible_prints: out[sn][arg] = details[arg]
             except KeyError:
                 pass
     

@@ -9,6 +9,7 @@ def out(msg):
 
     args = get_args()
     out = args.out
+    border = '----------------'
 
     if isinstance(msg, dict):
         if out == 'uf':
@@ -17,18 +18,19 @@ def out(msg):
                     raise TypeError(f'{infos} is not a dict')
 
                 if args.print_serial: print(sn)
+                if args.print_serial: print(border)
                 skip = False
                 for value in infos.values():
                     if isinstance(value, dict):
                         skip = True
                         if args.print_serial:
-                            print('\t {0}'.format(*value.values()))
+                            print(f'\t{" ".join(map(str, value.values()))}')
                         else:
                             print(*value.values())
 
                 if not skip:
                     if args.print_serial:
-                        print('\t {0}'.format(*infos.values()))
+                        print(f'\t{" ".join(map(str, infos.values()))}')
                     else:
                         print(*infos.values())
 

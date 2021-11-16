@@ -3,7 +3,7 @@
 
 from niuApi.arg import get_args
 from niuApi.commands import dispatch
-from niuApi.exceptions import NIURequestError
+from niuApi.exceptions import NIUCommandError, NIURequestError
 from niuApi.output import out
 
 def run():
@@ -23,5 +23,7 @@ def run():
     except NIURequestError as exc:
         print(exc)
         return 2
+    except NIUCommandError as exc:
+        return 4
 
     return 0

@@ -16,3 +16,10 @@ class NIURequestError(Exception):
     Args:
         Exception (str): message
     """
+
+class NIUCommandError(Exception):
+    """NIUCommandError Exception
+
+    Args:
+        Exception (str): message
+    """

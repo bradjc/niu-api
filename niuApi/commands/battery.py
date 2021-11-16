@@ -3,12 +3,18 @@ import niuApi.apicommands as apicommands
 def list(serial: str = None, print: list = ['bmsId'], **kwargs) -> dict:
     """Lists Batteries connected to the scooter
 
-    Args:
-        serial (str, optional): serial number of scooter. Defaults to None.
-        print (list, optional): Set the options to print. Defaults to ['bmsId'].
+    serial
+        Serial number of scooter to limit output.
+    
+    print
+        Limit output for keys:
+            [bmsId]
+        Default = [bmsId]
 
-    Returns:
-        dict: key: serial number, values: batteries with subkeys and subvalues
+    CLI Examples:
+        niu-api battery.list
+        niu-api battery.list serial=S3R1ALOFSC00T3R
+        niu-api battery.list print=bmsId
     """
 
     possible_prints = ['bmsId']
@@ -50,13 +56,22 @@ def list(serial: str = None, print: list = ['bmsId'], **kwargs) -> dict:
 def info(serial: str = None, bmsid: str = None, print: list = ['bmsId', 'batteryCharging'], **kwargs) -> dict:
     """Get info of the batteries conntected to the scooter
 
-    Args:
-        serial (str, optional): Serial number of given scooter. Defaults to None.
-        bmsid (str, optional): Battery id. Defaults to None.
-        print (list, optional): Print following options. Defaults to ['bmsId', 'batteryCharging'].
+    serial
+        Serial number of scooter to limit output.
 
-    Returns:
-        dict: key: serial number, values: batteries with subkeys and subvalues
+    bmsid
+        Battery ID to limit output.
+
+    print
+        Limit output for keys: 
+            [bmsId, batteryCharging, chargedTimes, energyConsumedToday,  
+            gradeBattery, isConnected, temperature, temperatureDesc]
+        Default = [bmsId, batteryCharging]
+
+    CLI Examples:
+        niu-api battery.info serial=S3R1ALOFSC00T3R bmsid=BATT3RY1D
+        niu-api battery.info bmsid=BATT3RY1D print=bmsId,batteryCharging
+        niu-api battery.info serial=S3R1ALOFSC00T3R print=bmsId,batteryCharging,gradeBattery
     """
 
     possible_prints = [
@@ -104,12 +119,18 @@ def info(serial: str = None, bmsid: str = None, print: list = ['bmsId', 'battery
 def ecu(serial: str = None, print: list = ['centreCtrlBattery']) -> dict:
     """Get info of ecu battery
 
-    Args:
-        serial (str, optional): Serial number of given scooter. Defaults to None.
-        print (list, optional): Print following options. Defaults to ['centreCtrlBattery'].
+    serial
+        Serial number of scooter to limit output.
 
-    Returns:
-        dict: key: serial number, values: batteries with subkeys and subvalues
+    print
+        Limit output for keys:
+            [centreCtrlBattery]
+        Default = [centreCtrlBattery]
+
+    CLI Examples:
+        niu-api battery.ecu serial=S3R1ALOFSC00T3R
+        niu-api battery.ecu print=centreCtrlBattery
+        niu-api battery.ecu
     """
 
     possible_prints = ['centreCtrlBattery']

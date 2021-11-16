@@ -29,7 +29,10 @@ def motor_data_cycling_statistics(serial):
 
     json_response = do_request(
         'v3/motor_data/cycling_statistics',
-        add_params={'sn': serial}
+        add_params={
+            'sn': serial,
+            'sortby': 1
+        },
     ).get('data')
 
     if len(json_response.keys()) == 0:

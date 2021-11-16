@@ -3,11 +3,15 @@ import niuApi.apicommands as apicommands
 def list(print: list = ['sn_id'], **kwargs) -> dict:
     """Get all scooters conntected with the desired accout
 
-    Args:
-        print (list, optional): Set the options to print. Defaults to ['sn_id'].
+    print
+        Limit output for keys:
+            [sn_id, scooter_name]
+        Default = [sn_id]
 
-    Returns:
-        dict: key: serial number, values: values in print option
+    CLI Examples:
+        niu-api scooter.list
+        niu-api scooter.list print=sn_id,scooter_name
+        niu-api scooter.list print=scooter_name
     """
 
     possible_prints = ['sn_id', 'scooter_name']
@@ -28,14 +32,21 @@ def list(print: list = ['sn_id'], **kwargs) -> dict:
     return out
 
 def info(serial: str = None, print: list = ['scooter_name', 'totalMileage'], **kwargs) -> dict:
-    """Return info of scooter
+    """Get scooter information
 
-    Args:
-        serial (str, optional): Serial number of given scooter. Defaults to None.
-        print (list, optional): Print following options. Defaults to ['scooter_name', 'totalMileage'].
+    serial
+        Serial number of scooter to limit output.
+    
+    print
+        Limit output for keys:
+            [scooter_name, totalMileage, sn_id, scooter_type,
+            scooter_version, soft_version, mileage, engine_num, battery]
+        Default = [scooter_name, totalMileage]
 
-    Returns:
-        dict: key: serial number, values: values in print option
+    CLI Examples:
+        niu-api scooter.info
+        niu-api scooter.info print=sn_id,scooter_name
+        niu-api scooter.info serial=S3R1ALOFSC00T3R print=engine_num
     """
 
     possible_prints = [

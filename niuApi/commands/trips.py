@@ -4,12 +4,12 @@ import niuApi.apicommands as apicommands
 
 today = date.today()
 
-def get(
+def summary_date(
     serial: str = None,
     print: list = ['everdayMileage'],
     date: list = [today.strftime("%Y%m%d")],
 ) -> dict:
-    """Get trip information by date (max. 29 days)
+    """Get trip summary by date (max. 29 days)
 
     serial
         Serial number of scooter to limit output.
@@ -21,9 +21,9 @@ def get(
         Default = [everdayMileage]
 
     CLI Examples:
-        niu-api trips.get serial=S3R1ALOFSC00T3R print=maxSpeed,everdayMileage
-        niu-api trips.get print=everdayMileage date=20211117
-        niu-api trips.get print=AvgSpeed,maxSpeed date=20211117,20211116,20211115
+        niu-api trips.summary_date serial=S3R1ALOFSC00T3R print=maxSpeed,everdayMileage
+        niu-api trips.summary_date print=everdayMileage date=20211117
+        niu-api trips.summary_date print=AvgSpeed,maxSpeed date=20211117,20211116,20211115
     """
 
     possible_prints = [

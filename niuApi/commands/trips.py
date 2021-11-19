@@ -64,3 +64,88 @@ def summary_date(
                 out[sn][index[0]] = key
 
     return out
+
+def detailed_date(
+    serial: str = None,
+    print: list = ['avespeed', 'distance'],
+    date: list = [today.strftime("%Y%m%d")],
+) -> dict:
+    """Get all trips by date
+
+    serial
+        Serial number of scooter to limit output.
+    
+    print
+        Limit output for keys:
+            [avespeeed, date, distance, startTime,
+            power_consumption, ridingtime, endTime]
+        Default = [avespeed, distance]
+
+    CLI Examples:
+        niu-api trips.detailed_date serial=S3R1ALOFSC00T3R print=ridingtime
+        niu-api trips.detailed_date print=everdayMileage date=20211117
+        niu-api trips.detailed_date print=avespeeed,power_consumption date=20211117,20211116,20211115
+    """
+
+    possible_prints = [
+        'avespeed', 'date', 'distance',
+        'ridingtime', 'startTime', 'endTime',
+        'power_consumption'
+    ]
+
+    if not isinstance(date, list): date = [ date ] # TODO
+
+    scooters = apicommands.v5.scooter_list()
+
+    out = {}
+    trip_info = {}
+    for scooter in scooters:
+        sn = scooter.get('sn_id')
+
+        if serial is not None:
+            if sn != serial:
+                continue
+
+        for day in date:
+            loopindex = 0
+            date_match = False
+            trips_full = {}
+            trips_list = []
+
+            if day > today.strftime("%Y%m%d"):
+                return out
+
+            while date_match is False:
+                trips_full = apicommands.v5.track_list_v2(sn, 100, loopindex)
+                trips_list = trips_full.get('track_mileage')
+                if len(trips_list) == 0: # break if trips are empty
+                    trips_full = {}
+                    trips_list = []
+                    break
+
+                for trip in trips_list:
+                    if str(trip.get('date')) == str(day):
+                        date_match = True
+                        break
+
+                if not date_match:
+                    loopindex += 1
+                else:
+                    break # break while loop, if date is found
+            
+            for trip in trips_full.get('items', []):
+
+                if str(trip.get('date')) != day: continue
+
+                if not trip_info.get(trip.get('date')):
+                    trip_info[trip.get('date')] = {}
+                trip_info[trip.get('date')][trip.get('trackId')] = {}
+                for arg in print:
+                    try:
+                        if arg in possible_prints: trip_info[trip.get('date')][trip.get('trackId')][arg] = trip[arg]
+                    except KeyError:
+                        pass
+
+        out[sn] = trip_info
+
+    return out

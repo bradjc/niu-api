@@ -115,6 +115,7 @@ def do_request(slug, method='get', add_params={}, add_headers={}, add_data={}):
             'headers': {
                 'token': get_token(),
                 'accept': 'application/json',
+                'accept-language': 'de-DE', # TODO
                 **add_headers
             },
         }

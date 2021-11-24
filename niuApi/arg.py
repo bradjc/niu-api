@@ -65,7 +65,25 @@ class StoreDictKeyPair(argparse.Action):
 
             if value.lower() == 'true' or value.lower() == 'false':
                 value = json.loads(value.lower())
-            elif ',' in value:
+            elif ',' in value and not ':' in value:
                 value = value.split(',')
+            elif ',' in value and ':' in value or ':' in value:
+                value = value.split(',')
+                for idx, val in enumerate(value):
+                    if not ':' in val:
+                        value.pop(idx)
+
+                value = dict(map(lambda s : s.split(':'), value))
+                #value = dict(map(lambda k, x: [k, json.loads(x.lower()) if x.lower() == 'true' or x.lower() == 'false' else x], value.keys(), value.values()))
+
+                for subkey, subvalue in value.items():
+                    
+                    if subvalue.lower() == 'true' or subvalue.lower() == 'false':
+                        value[subkey] = json.loads(subvalue.lower())
+                    
+                    try:
+                        value[subkey] = int(subvalue)
+                    except ValueError:
+                        pass
 
             getattr(namespace, self.dest)[key] = value

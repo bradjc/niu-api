@@ -17,7 +17,12 @@ def service_intelligent_detection(serial):
 
     json_response = do_request(
         'v3/service/intelligent_detection',
-        add_params={'sn': serial}
+        method='post',
+        add_data={
+            'sn': serial,
+            'id': '',
+            'type': 'create'
+        }
     ).get('data')
 
     if len(json_response.keys()) == 0:

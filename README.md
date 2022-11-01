@@ -16,6 +16,12 @@ niu-api trips.detailed_date date=20221028
 ### API
 
 ```python
+import niuApi
+from niuApi import apicommands
+from niuApi.apicommands import v3
+from niuApi.apicommands import v5
+from niuApi.apicommands import other
+
 scooters = niuApi.apicommands.v5.scooter_list()
 
 for scooter in scooters:

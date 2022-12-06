@@ -3,8 +3,8 @@ import yaml
 from niuApi.arg import get_args
 from niuApi.exceptions import NIUConfigError
 
-class NIUConfig():
 
+class NIUConfig:
     def __init__(self, config_file=None) -> None:
         """Initialize NIUConfig Class
 
@@ -13,7 +13,7 @@ class NIUConfig():
         """
 
         args = get_args()
-        if config_file is None:    
+        if config_file is None:
             self.config_file = args.config_file
         else:
             self.config_file = config_file
@@ -28,11 +28,11 @@ class NIUConfig():
             dict: YAMLFile as dict
         """
 
-        with open(self.config_file, 'r') as read_file:
+        with open(self.config_file, "r") as read_file:
             try:
                 return yaml.safe_load(read_file)
             except yaml.YAMLError as exc:
-                raise NIUConfigError(f'Failed to read {self.config_file}: {exc}')
+                raise NIUConfigError(f"Failed to read {self.config_file}: {exc}")
 
     def __getitem__(self, key):
         """Return specific item from read function
